@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "npm run build:config && next dev",
+    "build": "npm run build:config && next build && next export",
+    "build:config": "esbuild next.config.ts --bundle --outfile=next.config.js --platform=node --target=es2020",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-amplify/ui-react": "^2.6.1",
+    "aws-amplify": "^4.3.14",
+    "next": "12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "swr": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.19",
+    "@types/react": "17.0.39",
+    "eslint": "8.9.0",
+    "eslint-config-next": "12.1.0",
+    "typescript": "4.5.5"
+  }
+}
