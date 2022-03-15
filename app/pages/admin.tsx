@@ -3,14 +3,12 @@ import styles from '../styles/page.module.css'
 import useUser from '../lib/useUser'
 
 const Admin: NextPage = () => {
-  const { user, signOut } = useUser({ redirect: '/signin' })
+  const { user, loading, loggedOut, signOut } = useUser({ redirect: '/signin' })
 
-  if (!user) return <>Loading...</>
+  if (loading) return <>Loading...</>
+  if (loggedOut) return <>Redirect...</>
 
-  const session = user.getSignInUserSession()
-  const token = session?.getIdToken().getJwtToken()
-
-  console.log(`token: ${token}`)
+  console.log(user.signInUserSession?.idToken?.jwtToken)
 
   return (
     <>

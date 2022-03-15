@@ -1,0 +1,8 @@
+*.js
+*.d.ts
+node_modules
+!cloudfrontfunction/*.js
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out

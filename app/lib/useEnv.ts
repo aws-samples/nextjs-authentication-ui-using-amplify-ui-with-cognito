@@ -15,15 +15,15 @@ const fetcher = async () => {
 export default function useEnv() {
   const { data: env } = useSWR<Env>(dev ? null : '/env.json', fetcher, {
     revalidateOnFocus: false,
-    revalidateOnReconnect: false
+    revalidateOnReconnect: false,
   })
 
   if (dev) {
     return {
       env: Object.freeze({
         cognitoUserPoolId: process.env.NEXT_PUBLIC_AUTH_USER_POOL_ID,
-        cognitoUserPoolWebClientId: process.env.NEXT_PUBLIC_AUTH_WEB_CLIENT_ID
-      }) as Env
+        cognitoUserPoolWebClientId: process.env.NEXT_PUBLIC_AUTH_WEB_CLIENT_ID,
+      }) as Env,
     }
   }
 

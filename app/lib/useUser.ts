@@ -1,21 +1,27 @@
-import { useEffect } from 'react'
 import Router from 'next/router'
-import { useAuthenticator } from '@aws-amplify/ui-react'
+import useSWR, { useSWRConfig } from 'swr'
+import { Auth } from 'aws-amplify'
+
+const fetcher = async () => {
+  return Auth.currentAuthenticatedUser()
+}
 
 export default function useUser({ redirect = '' } = {}) {
-  const { user, signOut: _signOut } = useAuthenticator((context) => [context.user])
-  const { route } = useAuthenticator((context) => [context.route])
+  const { cache } = useSWRConfig()
+  const { data: user, error } = useSWR('user', fetcher)
 
-  useEffect(() => {
-    if (redirect && route !== 'authenticated') {
-      Router.push({ pathname: redirect, query: { redirect: Router.asPath } })
-    }
-  }, [user, route, redirect])
+  const loading = !user && !error
+  const loggedOut = error && error === 'The user is not authenticated'
 
-  const signOut = async ({ redirect = '/' }) => {
-    await Router.push(redirect)
-    _signOut()
+  if (loggedOut && redirect) {
+    Router.push({ pathname: redirect, query: { redirect: Router.asPath } })
   }
 
-  return { user, signOut }
+  const signOut = async ({ redirect = '/' }) => {
+    cache.delete('user')
+    await Router.push(redirect)
+    await Auth.signOut()
+  }
+
+  return { loading, loggedOut, user, signOut }
 }
